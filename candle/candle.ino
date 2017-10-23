@@ -1,72 +1,49 @@
-int amountOfBlowingA0 = 0;
-int amountOfBlowingA1 = 0;
-int amountOfBlowingA2 = 0;
-int amountOfBlowingA3 = 0;
-boolean lightForA0 = false;
-boolean lightForA1 = false;
-boolean lightForA2 = false;
-boolean lightForA3 = false;
+boolean light = false;
+// defines pins numbers
+const int trigPin = 9;
+const int echoPin = 10;
+// defines variables
+long duration;
+int distance;
 
-void setup() {
-  pinMode(7, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(A3, INPUT);
-  pinMode(A2, INPUT);
-  pinMode(A1, INPUT);
-  pinMode(A0, INPUT);
-  Serial.begin(9600);
+int getDistance(){
+int add[3];
+for(int x = 0; x < 3; x++){
+  digitalWrite(trigPin, LOW);
+delayMicroseconds(2);
+// Sets the trigPin on HIGH state for 10 micro seconds
+digitalWrite(trigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+// Reads the echoPin, returns the sound wave travel time in microseconds
+duration = pulseIn(echoPin, HIGH);
+// Calculating the distance
+add[x] = duration*0.034/2;
+}
+return min(min(add[0],add[1]),min(add[1],add[2]));
 }
 
+
+void setup() {
+pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+Serial.begin(9600); // Starts the serial communication
+pinMode(3, OUTPUT);
+}
 void loop() {
 
-  Serial.println(amountOfBlowingA3);
-  
-  amountOfBlowingA0 = analogRead(A0);
-  amountOfBlowingA1 = analogRead(A1);
-  amountOfBlowingA2 = analogRead(A2);
-  amountOfBlowingA3 = analogRead(A3);    
-  
-  if(amountOfBlowingA0 < 600){//check to see if a0 is being blown ;)
-    lightForA0 = !lightForA0;
-  }
-  
-  if(amountOfBlowingA1 < 600){//check to see if a1 is being blown ;)
-    lightForA1 = !lightForA1;
-  }
+distance = getDistance();
 
-  if(amountOfBlowingA2 < 600){//check to see if a2 is being blown ;)
-    lightForA2 = !lightForA2;
-  }
+// Prints the distance on the Serial Monitor
+Serial.print("Distance: ");
+Serial.println(distance);
+if(distance < 20){
 
-  if(amountOfBlowingA3 < 600){//check to see if a3 is being blown ;)
-    lightForA3 = !lightForA3;
+  light = !light;
+  digitalWrite(3, light);
+  while(distance < 20){
+    distance = getDistance();
   }
-
-  if(lightForA0){
-    digitalWrite(4,HIGH);
-  }
-  else{
-    digitalWrite(4,LOW);
-  }
-  if(lightForA1){
-    digitalWrite(5,HIGH);
-  }
-  else{
-    digitalWrite(5,LOW);
-  }
-  if(lightForA2){
-    digitalWrite(6,HIGH);
-  }
-  else{
-    digitalWrite(6,LOW);
-  }
-  if(lightForA3){
-    digitalWrite(7,HIGH);
-  }
-  else{
-    digitalWrite(7,LOW);
-  }
-  delay(250);
+  Serial.println("OUT");
+}
 }
