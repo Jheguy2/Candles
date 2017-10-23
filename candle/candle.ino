@@ -84,6 +84,7 @@ if(distance[0] < 20){
   }
 }
 if(distance[1] < 20){
+  Serial.println("2 TRIGGERED");
 
   light2 = !light2;
   digitalWrite(6, light2);
@@ -92,6 +93,7 @@ if(distance[1] < 20){
   }
 }
 if(distance[2] < 20){
+  Serial.println("3 TRIGGERED");
 
   light3 = !light3;
   digitalWrite(9, light3);
@@ -100,6 +102,7 @@ if(distance[2] < 20){
   }
 }
 if(distance[3] < 20){
+  Serial.println("4 TRIGGERED");
 
   light4 = !light4;
   digitalWrite(12, light4);
