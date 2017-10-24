@@ -1,13 +1,12 @@
-boolean light1 = false;
-boolean light2 = false;
-boolean light3 = false;
-boolean light4 = false;
+boolean light[4];
 
-long duration1;
-long duration2;
-long duration3;
-long duration4;
+for(int tempAtBeginning = 0; tempAtBeginning > 4; tempAtBeginning++){
+  light[tempAtBeginning] = false;
+}
+
+long duration[4];
 int distance[4];
+String answer = "";
 
 void getDistance(){
   
@@ -33,15 +32,15 @@ void getDistance(){
     digitalWrite(4, LOW);
     digitalWrite(7, LOW);
     digitalWrite(10, LOW);
-    duration1 = pulseIn(2, HIGH);
-    duration2 = pulseIn(5, HIGH);
-    duration3 = pulseIn(8, HIGH);
-    duration4 = pulseIn(11, HIGH);
+    duration[0] = pulseIn(2, HIGH);
+    duration[1] = pulseIn(5, HIGH);
+    duration[2] = pulseIn(8, HIGH);
+    duration[3] = pulseIn(11, HIGH);
     
-    add1[x] = duration1*0.034/2;
-    add2[x] = duration2*0.034/2;
-    add3[x] = duration3*0.034/2;
-    add4[x] = duration4*0.034/2;
+    add1[x] = duration[0]*0.034/2;
+    add2[x] = duration[1]*0.034/2;
+    add3[x] = duration[2]*0.034/2;
+    add4[x] = duration[3]*0.034/2;
   }
   distance[0] = min(min(add1[0],add1[1]),min(add1[1],add1[2]));
   distance[1] = min(min(add2[0],add2[1]),min(add2[1],add2[2]));
@@ -65,6 +64,8 @@ void setup() {
   pinMode(6, OUTPUT);
   pinMode(9, OUTPUT);
   pinMode(12, OUTPUT);
+
+  pinMode(0, OUTPUT);
   
   Serial.begin(9600);
 }
@@ -75,40 +76,29 @@ void loop() {
   // Prints the distance on the Serial Monitor
   //Serial.print("Distance: ");
   //Serial.println(distance);
-  if(distance[0] < 20){
-    Serial.println("1 TRIGGERED");
-    light1 = !light1;
-    digitalWrite(3, light1);
-    while(distance[0] < 20){
-      getDistance();
-    }
+
+  if(light[0]==false&&light[1]==false&&light[2]==false&&light[3]==false){
+    answer = "";
   }
-  if(distance[1] < 20){
-    Serial.println("2 TRIGGERED");
   
-    light2 = !light2;
-    digitalWrite(6, light2);
-    while(distance[1] < 20){
-      getDistance();
-    }
-  }
-  if(distance[2] < 20){
-    Serial.println("3 TRIGGERED");
-  
-    light3 = !light3;
-    digitalWrite(9, light3);
-    while(distance[2] < 20){
-      getDistance();
-    }
-  }
-  if(distance[3] < 20){
-    Serial.println("4 TRIGGERED");
-  
-    light4 = !light4;
-    digitalWrite(12, light4);
-    while(distance[3] < 20){
-      getDistance();
+  for(int x = 0; x < 4; x++){
+    if(distance[x] < 20){
+      Serial.println((x+1)+" TRIGGERED");
+      light[x] = !light[x];
+      if(light[x] == true){
+        answer += x;
+      }
+      digitalWrite((x+1)*3, light[x]);
+      while(distance[x] < 20){
+        getDistance();
+      }
     }
   }
 
+  if(answer == "3021"){
+    digitalWrite(0,HIGH);
+    delay(1000);
+    digitalWrite(0, LOW);
+  }
+  
 }
