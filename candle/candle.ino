@@ -41,7 +41,7 @@ void getDistance() {
   distance[1] = min(min(add2[0], add2[1]), min(add2[1], add2[2]));
   distance[2] = min(min(add3[0], add3[1]), min(add3[1], add3[2]));
   distance[3] = min(min(add4[0], add4[1]), min(add4[1], add4[2]));
-
+  
   for(int temp = 0; temp < 4; temp++){
     Serial.println(distance[temp]);
   }
