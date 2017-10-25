@@ -14,23 +14,35 @@ void getDistance() {
 
   for (int x = 0; x < 3; x++) {
     digitalWrite(A1, LOW);
-    digitalWrite(4, LOW);
-    digitalWrite(7, LOW);
-    digitalWrite(10, LOW);
     delayMicroseconds(2);
     digitalWrite(A1, HIGH);
-    digitalWrite(4, HIGH);
-    digitalWrite(7, HIGH);
-    digitalWrite(10, HIGH);
     delayMicroseconds(10);
     digitalWrite(A1, LOW);
-    digitalWrite(4, LOW);
-    digitalWrite(7, LOW);
-    digitalWrite(10, LOW);
     duration[0] = pulseIn(2, HIGH);
+    
+    digitalWrite(4, LOW);
+    delayMicroseconds(2);
+    digitalWrite(4, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(4, LOW);
+    delayMicroseconds(2);
     duration[1] = pulseIn(5, HIGH);
+    
+    digitalWrite(7, LOW);
+    delayMicroseconds(2);
+    digitalWrite(7, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(7, LOW);
     duration[2] = pulseIn(8, HIGH);
+
+    
+    digitalWrite(10, LOW);
+    delayMicroseconds(2);
+    digitalWrite(10, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(10, LOW);
     duration[3] = pulseIn(11, HIGH);
+  
 
     add1[x] = duration[0] * 0.034 / 2;
     add2[x] = duration[1] * 0.034 / 2;
@@ -41,10 +53,9 @@ void getDistance() {
   distance[1] = min(min(add2[0], add2[1]), min(add2[1], add2[2]));
   distance[2] = min(min(add3[0], add3[1]), min(add3[1], add3[2]));
   distance[3] = min(min(add4[0], add4[1]), min(add4[1], add4[2]));
-  
-  for(int temp = 0; temp < 4; temp++){
-    Serial.println(distance[temp]);
-  }
+  //for(int temp = 0; temp < 4; temp++){
+  //  Serial.println(distance[temp]);
+  //}
 }
 
 
@@ -98,9 +109,11 @@ void loop() {
     }
   }
 
-  if (answer == "3021") {
+  if (answer == "0123") {
     digitalWrite(A2, HIGH);
     delay(1000);
     digitalWrite(A2, LOW);
+    answer = "";
+    Serial.println("YOU WIN YOU FUCK");
   }
 }
